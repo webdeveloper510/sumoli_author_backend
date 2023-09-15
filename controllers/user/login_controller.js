@@ -10,14 +10,6 @@ exports.user_signup = async (req, res) => {
     try {
         let data = req.body
         let OTP = randtoken.generate(6,"123456789")
-        // let checkPhone = await USER.findOne({phone_no:data.phone_no})
-        // if(checkPhone){
-        //     res.send({
-        //         code: constant.error_code,
-        //         message: "User already exist with this phone number"
-        //     })
-        //     return;
-        // }
         let checkEmail = await USER.findOne({ email: data.email })
         if (checkEmail) {
             res.send({
