@@ -82,13 +82,13 @@ exports.user_signin = async (req, res) => {
     try {
         let data = req.body
         let checkEmail = await USER.findOne({ email: data.email })
-        if (checkEmail.status == 0) {
-            res.send({
-                code: constant.success_code,
-                message: "Please verify your email"
-            })
-            return;
-        }
+        // if (checkEmail.status == 0) {
+        //     res.send({
+        //         code: constant.success_code,
+        //         message: "Please verify your email"
+        //     })
+        //     return;
+        // }
         if (!checkEmail) {
             res.send({
                 code: constant.error_code,
