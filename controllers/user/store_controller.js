@@ -150,6 +150,7 @@ exports.edit_store = async(req,res)=>{
                 store_name:updateStore.store_name,
                 store_location:updateStore.store_location,
                 contacts:updateStore.contacts,
+                createdAt:updateStore.createdAt
             }
         })
       }

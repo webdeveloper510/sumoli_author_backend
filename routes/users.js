@@ -22,7 +22,7 @@ router.post('/reset_password',[verifyToken], login_controller.reset_password)
 router.get('/get_user_detail',[verifyToken], login_controller.get_user_detail)
 router.put('/update_user_detail',[verifyToken], login_controller.update_user_detail)
 
-//------------------- USER API'S--------------------------
+//------------------- BOOK API'S--------------------------
 router.post('/add_book',[verifyToken],book_controller.add_book)
 router.get('/get_users_book',[verifyToken],book_controller.get_users_book)
 router.get('/get_all_book',[verifyToken],book_controller.get_all_book)
@@ -31,7 +31,7 @@ router.put('/edit_book',[verifyToken],book_controller.edit_book)
 router.delete('/delete_book/:bookId',[verifyToken],book_controller.delete_book)
 
 
-//------------------- USER API'S--------------------------
+//------------------- STORE API'S--------------------------
 router.post('/add_store',[verifyToken],store_controller.add_store)
 router.get('/get_user_stores',[verifyToken],store_controller.get_user_stores)
 router.get('/get_all_stores',[verifyToken],store_controller.get_all_stores)
