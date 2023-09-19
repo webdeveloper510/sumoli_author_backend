@@ -72,3 +72,76 @@ exports.get_book_detail = async(req,res)=>{
         })
     }
 }
+
+exports.edit_book = async(req,res)=>{
+    try{
+        let data = req.body
+        let criteria = {_id:data.bookId}
+        let option = {new:true}
+        let checkBook = await BOOK.findOne(criteria)
+        if(!checkBook){
+            res.send({
+                code:constant.error_code,
+                message:"Invalid book ID"
+            })
+            return;
+        }
+        let updateBook = await BOOK.findOneAndUpdate(criteria,data,option)
+        if(!updateBook){
+            res.send({
+                code:constant.error_code,
+                message:"Unable to update the book"
+            })
+        }else{
+            res.send({
+                code:constant.success_code,
+                message:"Updated",
+                result:updateBook
+            })
+        }
+    }catch(err){
+        res.send({
+            code:constant.error_code,
+            message:err.message
+        })
+    }
+}
+
+exports.delete_book = async(req,res)=>{
+    try{
+        let data = req.body
+        let criteria = {_id:req.params.bookId}
+        let option = {new:true}
+        let checkBook = await BOOK.findOne(criteria)
+        if(!checkBook){
+            res.send({
+                code:constant.error_code,
+                message:"Invalid book ID"
+            })
+            return;
+        }
+        let updateBook = await BOOK.findOneAndUpdate(criteria,{isDeleted:true},option)
+        if(!updateBook){
+            res.send({
+                code:constant.error_code,
+                message:"Unable to update the book"
+            })
+        }else{
+            res.send({
+                code:constant.success_code,
+                message:"Updated",
+                result:updateBook
+            })
+        }
+    }catch(err){
+        res.send({
+            code:constant.error_code,
+            message:err.message
+        })
+    }
+}
+
+
+
+
+

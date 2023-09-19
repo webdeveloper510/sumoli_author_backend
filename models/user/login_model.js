@@ -27,6 +27,10 @@ const user = new Schema({
         type: Number,
         default: 0
     },
+    isDeleted:{
+        type:Boolean,
+        default:false
+    },
     status: {
         type: Number,
         enum: [0, 1],

@@ -10,7 +10,7 @@ var bookStorage = multer.diskStorage({
         cb(null, path.join(__dirname, '../../uploads/book'))
     },
     filename: function (req, file, cb) {
-        console.log(file)
+        console.log("file+++++++++++++++++++++++=",file)
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     }
 })
@@ -71,7 +71,7 @@ exports.get_users_book = async (req, res) => {
             $and: [
                 { userId: req.userId },
                 // { status: true },
-                {isDeleted:false}
+                { isDeleted: false }
             ]
         })
         if (!getBooks) {
@@ -101,8 +101,8 @@ exports.get_book_by_id = async (req, res) => {
         let getBook = await BOOK.findOne({
             $and: [
                 { _id: data.bookId },
-                // { status: true }
-                {isDeleted:false}
+                { status: true },
+                { isDeleted: false }
             ]
         })
         if (!getBook) {
@@ -135,7 +135,12 @@ exports.get_book_by_id = async (req, res) => {
 
 exports.get_all_book = async (req, res) => {
     try {
-        let getBooks = await BOOK.find({ isDeleted: false })
+        let getBooks = await BOOK.find({
+            $and: [
+                { isDeleted: false },
+                { status: true }
+            ]
+        })
         if (!getBooks) {
             res.send({
                 code: constant.error_code,
@@ -157,68 +162,68 @@ exports.get_all_book = async (req, res) => {
     }
 }
 
-exports.edit_book = async(req,res)=>{
-    try{
-    bookUpload(req,res,async(err)=>{
-        try{
-            let data = req.body
-            let file = req.file
-            let checkBook = await BOOK.findOne({_id:data.bookId})
-            if(!checkBook){
+exports.edit_book = async (req, res) => {
+    try {
+        bookUpload(req, res, async (err) => {
+            try {
+                let data = req.body
+                let file = req.file
+                let checkBook = await BOOK.findOne({ _id: data.bookId })
+                if (!checkBook) {
+                    res.send({
+                        code: constant.error_code,
+                        message: "Invalid Book ID"
+                    })
+                    return;
+                }
+                data.cover_image = file ? file.filename : checkBook.filename
+                let updateData = await BOOK.findOneAndUpdate({ _id: data.bookId }, data, { new: true })
+                if (!updateData) {
+                    res.send({
+                        code: constant.error_code,
+                        message: "Unable to update the data"
+                    })
+                } else {
+                    res.send({
+                        code: constant.success_code,
+                        message: "Success",
+                        result: updateData
+                    })
+                }
+            } catch (err) {
                 res.send({
-                    code:constant.error_code,
-                    message:"Invalid Book ID"
+                    code: constant.error_code,
+                    message: err.message
                 })
-                return;
             }
-            data.cover_image = file ?file.filename:checkBook.filename
-            let updateData = await BOOK.findOneAndUpdate({_id:data.bookId},data,{new:true})
-            if(!updateData){
-                res.send({
-                    code:constant.error_code,
-                    message:"Unable to update the data"
-                })
-            }else{
-                res.send({
-                    code:constant.success_code,
-                    message:"Success",
-                    result:updateData
-                })
-            }
-        }catch(err){
-            res.send({
-                code:constant.error_code,
-                message:err.message
-            })
-        }
-    })
-    }catch(err){
+        })
+    } catch (err) {
         res.send({
-            code:constant.error_code,
-            message:err.message
+            code: constant.error_code,
+            message: err.message
         })
     }
 }
 
-exports.delete_book = async(req,res)=>{
-    try{
-    let data = req.body
-    let deleteBook = await BOOK.findOneAndUpdate({_id:req.params.bookId},{isDeleted:true},{new:true})
-    if(!deleteBook){
+exports.delete_book = async (req, res) => {
+    try {
+        let data = req.body
+        let deleteBook = await BOOK.findOneAndUpdate({ _id: req.params.bookId }, { isDeleted: true }, { new: true })
+        if (!deleteBook) {
+            res.send({
+                code: constant.error_code,
+                message: "Unable to delete the book"
+            })
+        } else {
+            res.send({
+                code: constant.success_code,
+                message: "Deleted"
+            })
+        }
+    } catch (err) {
         res.send({
-            code:constant.error_code,
-            message:"Unable to delete the book"
-        })
-    }else{
-        res.send({
-            code:constant.success_code,
-            message:"Deleted"
-        })
-    }
-    }catch(err){
-        res.send({
-            code:constant.error_code,
-            message:err.message
+            code: constant.error_code,
+            message: err.message
         })
     }
 }
