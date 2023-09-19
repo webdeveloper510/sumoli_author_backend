@@ -20,14 +20,14 @@ const book = new Schema({
     },
     status:{
         type:Boolean,
-        default:false
+        default:true
     },
     isDeleted:{
         type:Boolean,
         default:false
     },
     userId:{
-        type:mongoose.Types.ObjectId,ref:"users"
+        type:mongoose.Schema.Types.ObjectId,ref:"users"
     }
 },{timestamps:true})
 

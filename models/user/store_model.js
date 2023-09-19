@@ -23,7 +23,7 @@ const store = new Schema({
         }
     },
     userId:{
-        type:mongoose.Types.ObjectId,ref:'users'
+        type:mongoose.Schema.Types.ObjectId,ref:'users'
     },
     isDeleted:{
         type:Boolean,
